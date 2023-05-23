@@ -5,6 +5,7 @@ import com.wendy.employeeservice.dto.DepartmentDto;
 import com.wendy.employeeservice.dto.EmployeeDto;
 import com.wendy.employeeservice.entity.Employee;
 import com.wendy.employeeservice.repository.EmployeeRepository;
+import com.wendy.employeeservice.service.APIClient;
 import com.wendy.employeeservice.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.startup.WebAnnotationSet;
@@ -18,7 +19,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     //private final RestTemplate restTemplate;
-    private final WebClient webClient;
+    //private final WebClient webClient;
+    private final APIClient apiClient;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -33,12 +35,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/v1/department/" + employee.getDepartmentCode(),
 //                DepartmentDto.class);
 //        DepartmentDto departmentDto = responseEntity.getBody();
-
-       DepartmentDto departmentDto =  webClient.get()
-                .uri("http://localhost:8080/api/v1/department/" + employee.getDepartmentCode())
-                .retrieve()
-                .bodyToMono(DepartmentDto.class)
-                .block();
+//
+//       DepartmentDto departmentDto =  webClient.get()
+//                .uri("http://localhost:8080/api/v1/department/" + employee.getDepartmentCode())
+//                .retrieve()
+//                .bodyToMono(DepartmentDto.class)
+//                .block();
+        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
         EmployeeDto employeeDto = mapToEmployeeDto(employee);
         ApiResponseDto apiResponseDto = new ApiResponseDto();
